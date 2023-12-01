@@ -85,4 +85,3 @@ def main2(input):
     return sum
 
 print( main2("input.txt") )
-
