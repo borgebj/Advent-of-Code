@@ -1,4 +1,3 @@
-
 # borgebj
 # part of Advent of code 2023 day 1
 # https://adventofcode.com/2023/day/1#part2
@@ -6,7 +5,7 @@
 
 # part 1
 # only numbers
-def main1(input):
+def part_one(inp_file):
     """Goes through file and finds the total sum of the number from the first and last digit of each line
     Includes only digits like 1,2,3, etc.
 
@@ -15,7 +14,7 @@ def main1(input):
     return:
         int: total sum
     """
-    inp = open(input)
+    inp = open(inp_file)
     sum = 0
 
     # iterates through lines saving first and last number
@@ -32,21 +31,24 @@ def main1(input):
                     first = letter
                 last = letter
 
-
         # adds combined numbers to total
-        sum += int(first+last)
+        sum += int(first + last)
 
     # returns total
     return sum
 
-# print( main1("input.txt") )
+
+tot_sum = part_one("input.txt")
+print("Part one:", tot_sum)
 
 
 # part 2
 # including words to number
-words = {"one":"1", "two":"2", "three":"3", "four":"4", "five":"5", "six":"6", "seven":"7", "eight":"8", "nine":"9"}
+words = {"one": "1", "two": "2", "three": "3", "four": "4", "five": "5", "six": "6", "seven": "7", "eight": "8",
+         "nine": "9"}
 
-def main2(input):
+
+def part_two(inp_file):
     """Goes through file and finds the total sum of the number from the first and last digit of each line
     Includes both digits like 1,2,3, etc. AND worded numbers like "one", "two", "three", etc.
 
@@ -55,7 +57,7 @@ def main2(input):
     return:
         int: total sum
     """
-    inp = open(input)
+    inp = open(inp_file)
     sum = 0
 
     for line in inp:
@@ -79,9 +81,11 @@ def main2(input):
                         last = words[sub]
 
         # adds combined numbers to total
-        sum += int(first+last)
+        sum += int(first + last)
 
     # returns total
     return sum
 
-print( main2("input.txt") )
+
+num_sum = part_two("input.txt")
+print("Part two:", num_sum)

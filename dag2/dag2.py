@@ -1,18 +1,17 @@
-
 # borgebj
 # part of Advent of code 2023 day 2
 # https://adventofcode.com/2023/day/2
 
 
-def part_one(input):
+def part_one(inp_file):
     """
     param:
         input (string): name of input-file
     return:
         int: sum of IDs
     """
-    inp = open(input)
-    sum = 0
+    inp = open(inp_file)
+    id_sum = 0
 
     for line in inp:
 
@@ -26,8 +25,8 @@ def part_one(input):
         valid_game = True
 
         # iterates through each game-set
-        for set in rest.split(";"):
-            cubes = set.split(",")
+        for game_set in rest.split(";"):
+            cubes = game_set.split(",")
 
             # iterates through each cube and its color for each set
             for cube in cubes:
@@ -42,37 +41,37 @@ def part_one(input):
 
         # adds sum if valid game ↑
         if valid_game:
-            sum += game_id
+            id_sum += game_id
 
-    return sum
+    return id_sum
 
 
 col_sum = part_one("input.txt")
 print("part one:", col_sum)
 
 
-def part_two(input):
+def part_two(inp_file):
     """
     param:
         input (string): name of input-file
     return:
         int: sum of IDs
     """
-    inp = open(input)
-    sum = 0
+    inp = open(inp_file)
+    id_sum = 0
 
     for line in inp:
 
         # dict to hold colors for each game
         colors = {"red": 0, "green": 0, "blue": 0}
 
-        # seperates the game ID and the game
+        # separates the game ID and the game
         colon = line.index(":")
         rest = line[colon + 2:]
 
         # iterates through each game-set
-        for set in rest.split(";"):
-            cubes = set.split(",")
+        for game_set in rest.split(";"):
+            cubes = game_set.split(",")
 
             # iterates through each cube and its color for each set
             for cube in cubes:
@@ -86,9 +85,9 @@ def part_two(input):
 
         # calculates the power of the cubes
         power = colors["red"] * colors["green"] * colors["blue"]
-        sum += power
+        id_sum += power
 
-    return sum
+    return id_sum
 
 
 pow_sum = part_two("input.txt")
