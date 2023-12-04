@@ -14,28 +14,28 @@ def part_one(inp_file):
     return:
         int: total sum
     """
-    inp = open(inp_file)
-    sum = 0
+    with open(inp_file) as inp:
+        sum = 0
 
-    # iterates through lines saving first and last number
-    for line in inp:
-        first = ""
-        last = ""
+        # iterates through lines saving first and last number
+        for line in inp:
+            first = ""
+            last = ""
 
-        # checks for numbers
-        for letter in line:
+            # checks for numbers
+            for letter in line:
 
-            # first is assigned once, last gets overwritten
-            if letter.isdigit():
-                if not first:
-                    first = letter
-                last = letter
+                # first is assigned once, last gets overwritten
+                if letter.isdigit():
+                    if not first:
+                        first = letter
+                    last = letter
 
-        # adds combined numbers to total
-        sum += int(first + last)
+            # adds combined numbers to total
+            sum += int(first + last)
 
-    # returns total
-    return sum
+        # returns total
+        return sum
 
 
 tot_sum = part_one("input.txt")

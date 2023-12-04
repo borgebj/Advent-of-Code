@@ -10,40 +10,40 @@ def part_one(inp_file):
     return:
         int: sum of IDs
     """
-    inp = open(inp_file)
-    id_sum = 0
+    with open(inp_file) as inp:
+        id_sum = 0
 
-    for line in inp:
+        for line in inp:
 
-        # dict to hold colors for each game
-        colors = {"red": 0, "green": 0, "blue": 0}
+            # dict to hold colors for each game
+            colors = {"red": 0, "green": 0, "blue": 0}
 
-        # seperates the game ID and the game
-        colon = line.index(":")
-        rest = line[colon + 2:]
-        game_id = int(line[:colon].split()[1])
-        valid_game = True
+            # seperates the game ID and the game
+            colon = line.index(":")
+            rest = line[colon + 2:]
+            game_id = int(line[:colon].split()[1])
+            valid_game = True
 
-        # iterates through each game-set
-        for game_set in rest.split(";"):
-            cubes = game_set.split(",")
+            # iterates through each game-set
+            for game_set in rest.split(";"):
+                cubes = game_set.split(",")
 
-            # iterates through each cube and its color for each set
-            for cube in cubes:
-                cubeline = cube.strip().split()
-                num = int(cubeline[0])
-                col = cubeline[1].lower()
-                colors[col] = num
+                # iterates through each cube and its color for each set
+                for cube in cubes:
+                    cubeline = cube.strip().split()
+                    num = int(cubeline[0])
+                    col = cubeline[1].lower()
+                    colors[col] = num
 
-                # invalid game if these criteria are met
-                if colors["red"] > 12 or colors["green"] > 13 or colors["blue"] > 14:
-                    valid_game = False
+                    # invalid game if these criteria are met
+                    if colors["red"] > 12 or colors["green"] > 13 or colors["blue"] > 14:
+                        valid_game = False
 
-        # adds sum if valid game ↑
-        if valid_game:
-            id_sum += game_id
+            # adds sum if valid game ↑
+            if valid_game:
+                id_sum += game_id
 
-    return id_sum
+        return id_sum
 
 
 col_sum = part_one("input.txt")
