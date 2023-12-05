@@ -28,12 +28,6 @@ def retrieve_valid(num, lines, i):
 
 
 def part_one(inp_file):
-    """
-    param:
-        input (string): name of input-file
-    return:
-        int: Sum of all part numbers from input
-    """
     with open(inp_file) as file:
         lines = [x.replace("\n", "") for x in file.readlines()]
         tot_sum = 0
@@ -66,12 +60,6 @@ print("part one:", part_sum)
 
 
 def part_two(inp_file):
-    """
-    param:
-        input (string): name of input-file
-    return:
-        int: Sum of all part gear-ratios from input
-    """
     with open(inp_file) as file:
         lines = [x.replace("\n", "") for x in file.readlines()]
 
