@@ -38,22 +38,17 @@ def count_cards(copies: list, lookup: dict, lookup_sum: dict) -> None:
 
 # counts winning points by 1 for none and multiples of 2 for any
 def part_one(lookup: dict) -> str:
-    lookup = [2 ** (len(lookup[key]) - 1) if lookup[key] else 0 for key in lookup]
-    return f'Part one: {sum(lookup)}'
+    win_sum = sum([2 ** (len(v) - 1) for k, v in lookup.items() if len(v) > 0])
+    return f'Part one: {win_sum}'
 
 
 # counts copies for each of the cards based on winning
 def part_two(lookup: dict) -> str:
     lookup_sum = {i + 1: 1 for i in range(len(lookup))}
 
-    # for copies in lookup.values():
-    #     count_cards(copies, lookup, lookup_sum)
-    #
-    # for a, (b, c) in enumerate([[1], [1], [1]]):
-    #     print(a, (b,c))
+    for copies in lookup.values():
+        count_cards(copies, lookup, lookup_sum)
 
-    count = [1] * len(lookup)
-    print(len(count))
     return f'Part two: {sum(lookup_sum.values())}'
 
 
