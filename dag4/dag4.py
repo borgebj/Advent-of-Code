@@ -46,6 +46,20 @@ def part_one(lookup: dict) -> str:
 def part_two(lookup: dict) -> str:
     lookup_sum = {i + 1: 1 for i in range(len(lookup))}
 
+
+    #------------------------------------------------------------------------------
+    # TODO finn ut av dette, idk hvordan det fungerer
+    data = {k: len(v) for k,v in lookup.items()}
+    [print(str(k)+":", v, [k+i+1 for i in range(v)]) for k,v in data.items()]
+
+    # score = [1] * len(lookup.items())
+    # for c, wins in enumerate([len(v) for _, v in lookup.items()]):
+    #     i, j = c + 1, c + 1 + wins
+    #     score[i:j] = [x + score[c] for x in score[i:j]]
+    # print(sum(score))
+    #------------------------------------------------------------------------------
+
+
     for copies in lookup.values():
         count_cards(copies, lookup, lookup_sum)
 
