@@ -4,6 +4,7 @@ with open("input.txt", "r") as f:
     read = f.read()
     data = [line.strip() for line in read.splitlines() if line]  # gets lines from file
     startNodes = [line.strip() for line in read.split() if line and line.endswith("A")]  # nodes ending with A
+# parsing
 
 
 def parse_to_map(data):

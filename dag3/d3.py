@@ -1,5 +1,6 @@
 with open("input.txt", "r") as f:
     data = [line.strip() for line in f]
+# parsing
 
 
 def create_matrix(dat: list[str]) -> list[list[str]]:

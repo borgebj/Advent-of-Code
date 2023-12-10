@@ -2,65 +2,37 @@
 # part of Advent of code 2023 day 1
 # https://adventofcode.com/2023/day/1#part2
 
+with open("input.txt") as f:
+    data = f.read().splitlines()
+
 
 # part 1
 # only numbers
-def part_one(inp_file):
-    """Goes through file and finds the total sum of the number from the first and last digit of each line
-    Includes only digits like 1,2,3, etc.
+def part_one(data: list[str]) -> int:
+    total_sum = 0
 
-    param:
-        input (string): name of input-file
-    return:
-        int: total sum
-    """
-    with open(inp_file) as inp:
-        sum = 0
+    # iterates through lines saving first and last number
+    for line in data:
+        digits = [char for char in line if char.isdigit()]
 
-        # iterates through lines saving first and last number
-        for line in inp:
-            first = ""
-            last = ""
+        if digits:
+            total_sum += int(digits[0] + digits[-1])  # adds first and last
 
-            # checks for numbers
-            for letter in line:
-
-                # first is assigned once, last gets overwritten
-                if letter.isdigit():
-                    if not first:
-                        first = letter
-                    last = letter
-
-            # adds combined numbers to total
-            sum += int(first + last)
-
-        # returns total
-        return sum
-
-
-tot_sum = part_one("input.txt")
-print("Part one:", tot_sum)
+    # returns total
+    return total_sum
 
 
 # part 2
 # including words to number
-words = {"one": "1", "two": "2", "three": "3", "four": "4", "five": "5", "six": "6", "seven": "7", "eight": "8",
-         "nine": "9"}
+words = {"one": "1", "two": "2", "three": "3", "four": "4", "five": "5",
+         "six": "6", "seven": "7", "eight": "8", "nine": "9"}
 
 
-def part_two(inp_file):
-    """Goes through file and finds the total sum of the number from the first and last digit of each line
-    Includes both digits like 1,2,3, etc. AND worded numbers like "one", "two", "three", etc.
-
-    param:
-        input (string): name of input-file
-    return:
-        int: total sum
-    """
-    inp = open(inp_file)
+def part_two(data):
     sum = 0
 
-    for line in inp:
+    # iterates through lines saving first and last number
+    for line in data:
         first = ""
         last = ""
 
@@ -87,5 +59,20 @@ def part_two(inp_file):
     return sum
 
 
-num_sum = part_two("input.txt")
+tot_sum = part_one(data)
+num_sum = part_two(data)
+print("Part one:", tot_sum)
 print("Part two:", num_sum)
+
+
+# super-short regex
+import re
+
+# part 1
+nums = [num for line in data for num in [re.findall(r"[0-9]", line)]] # detects digits 0-9
+print(f'Part one R: {sum(int(num[0] + num[-1]) for num in nums if num)}')
+
+# part 2
+nums = [num for line in data for num in [re.findall(r"(?=([0-9]|one|two|three|four|five|six|seven|eight|nine))", line)]] # detects both text and digit
+print(f'Part two R: {sum([int(words.get(num[0], num[0]) + words.get(num[-1], num[-1])) for num in nums])}')
+
