@@ -68,6 +68,8 @@ print("Part two:", num_sum)
 # super-short regex
 import re
 
+print(re.findall(r'[0-9]', data[0]))
+
 # part 1
 nums = [num for line in data for num in [re.findall(r"[0-9]", line)]] # detects digits 0-9
 print(f'Part one R: {sum(int(num[0] + num[-1]) for num in nums if num)}')
