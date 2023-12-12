@@ -55,7 +55,7 @@ def history_sum_rec_in(data: list) -> (int, int):
 past_sum, future_sum = history_sum_it(data)
 print(f'Rec: Sum of extrapolated past and future history sum is {format(past_sum, ",")} and {format(future_sum, ",")}')
 past_sum, future_sum = history_sum_rec_in(data)
-print(f'it: Sum of extrapolated past and future history sum is {format(past_sum, ",")} and {format(future_sum, ",")}')
+print(f'it:  Sum of extrapolated past and future history sum is {format(past_sum, ",")} and {format(future_sum, ",")}')
 
 
 # notes part 2
