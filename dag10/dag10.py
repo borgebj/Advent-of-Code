@@ -11,6 +11,7 @@ with open("input.txt", mode="r") as f:
 
 
 def fine_print(matrix):
+    print()
     rows, cols = len(matrix), len(matrix[0])
 
     # colored-text
@@ -29,12 +30,13 @@ def fine_print(matrix):
     # Print matrix content with row indices
     for i, row in enumerate(matrix):
         print(f"{i:>{max_width}} |", end="")
-        for elem in row:
-            if elem != 0 and elem != ".":
+        for j, elem in enumerate(row):
+            if elem != 0 and elem != "." or (i, j) == start:
                 print(f"{GREEN}{elem:>{max_width}}{RESET} ", end="")
             else:
                 print(f"{elem:>{max_width}} ", end="")
         print()
+    print()
 
 
 def inside_bounds(row, col, max_rows, max_cols):
@@ -100,11 +102,11 @@ def traverse(from_sym, distances, from_dir, i):
 
     # goes through all legal paths
     for direction, dest_sym, (dr, dc) in legal_paths:
-        if direction != from_dir:
+        if direction != from_dir and dest_sym != "S":
             print("Going ->   ", direction, dest_sym, (dr, dc))
             distances[dr][dc] = i
             traverse((dr, dc), distances, opposite_direction(direction), i)
-            break
+            break # ensures only one direction AT THE START (should do nothing further on)
 
 
 distances = [[0 for _ in _] for _ in matrix]  # list for mapping of distances
