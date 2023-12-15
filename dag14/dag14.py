@@ -63,7 +63,6 @@ def tilt_cycle(data, cycles):
     return data
 
 
-# calculate part 2
 cycles = int(input("Cycles: "))
 
 # time-measure
@@ -71,8 +70,8 @@ start = time.time()
 data = tilt_cycle(data, cycles)
 time_taken = time.time() - start
 
+# counts the sum of number of O's on each row times the row number reversed
 weights = sum([(row.count("O") * (len(row) - i)) for i, row in enumerate(data)])
-
 
 # prints part 1 or part 2 based on cycles
 print(f'Weights {"part 1" if cycles == 1 else "part 2"} = {weights}, took {time_taken}s')
