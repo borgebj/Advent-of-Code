@@ -14,24 +14,27 @@ distances = [[0 for _ in _] for _ in matrix]  # list for mapping of distances
 
 
 # fine-prints a 2D array into a nice HTML with color
-def fine_print_to_html(matrix, output_file):
+def fine_print_to_html(mat, output_file):
     with open(output_file, mode="w") as f:
         f.write("<html><head><style>")
         f.write("body { background-color: #1E1E1E; color: #FFFFFF; padding: 20px; margin: 0; font-family: monospace; }")
         f.write(".green { color: #00FF00; }")
-        f.write(".red { color: #FF0000; }")  # Change to red or another color of your choice
+        f.write(".red { color: #FF0000; }")
+        f.write(".orange { color: #FFA500; }")
         f.write("</style></head><body><pre>")
 
-        rows, cols = len(matrix), len(matrix[0])
-        max_width = max(len(str(matrix[i][j])) for i in range(rows) for j in range(cols)) + 1
+        rows, cols = len(mat), len(mat[0])
+        max_width = max(len(str(mat[i][j])) for i in range(rows) for j in range(cols)) + 1
 
         f.write("    " + " ".join(f"{i:>{max_width}}" for i in range(cols)) + "<br>")
         f.write("   " + "-" * (max_width * cols + 4) + "---" * max_width + "<br>")
 
-        for i, row in enumerate(matrix):
+        for i, row in enumerate(mat):
             f.write(f"{i:>{max_width}} |")
             for j, elem in enumerate(row):
-                if (elem != 0 and elem != "O") and elem != "." or (i, j) == start:
+                if (i, j) == start:
+                    f.write(f"<span class='orange'>{'S':>{max_width}}</span> ")
+                elif elem != 0 and elem != "O" and elem != ".":
                     f.write(f"<span class='green'>{elem:>{max_width}}</span> ")
                 elif elem == 0:
                     f.write(f"<span class='red'>{elem:>{max_width}}</span> ")
@@ -89,14 +92,14 @@ def get_legal_paths(current_node, adjacent):
 
 
 # traverse iteratively - works better than the recursive
-def traverse_dfs(matrix, start, distances):
+def traverse_dfs(mat, start, distances):
     stack = [(start, "X", 0)]  # Start node, direction, and distance   | DFS = stack BFS = queue
     while stack:
         (row, col), from_dir, i = stack.pop()  # DFS = stack.pop BFS = queue.pop(0)
 
         # gets all legal paths
         adjacent = get_adjacent(row, col)
-        legal_paths = get_legal_paths(matrix[row][col], adjacent)
+        legal_paths = get_legal_paths(mat[row][col], adjacent)
 
         # goes through all legal paths
         for direction, dest_sym, (dr, dc) in legal_paths:
@@ -108,15 +111,17 @@ def traverse_dfs(matrix, start, distances):
                     stack.append(((dr, dc), opposite_direction(direction), i + 1))
 
 
-def flood_fill(matrix, row, col, fill_value):
+def flood_fill(mat, row, col, fill_value):
     stack = [(row, col)]
+    max_rows = len(mat)
+    max_cols = len(mat[0])
 
     while stack:
         current_row, current_col = stack.pop()
 
-        if 0 <= current_row < len(matrix) and 0 <= current_col < len(matrix[0]) and not matrix[current_row][
+        if inside_bounds(current_row, current_col, max_rows, max_cols) and not mat[current_row][
             current_col]:
-            matrix[current_row][current_col] = fill_value
+            mat[current_row][current_col] = fill_value
 
             stack.append((current_row - 1, current_col))  # North
             stack.append((current_row + 1, current_col))  # South
@@ -128,28 +133,31 @@ def flood_fill(matrix, row, col, fill_value):
             stack.append((current_row + 1, current_col + 1))  # Southeast
 
 
-def fill_corners(matrix, fill_value):
-    max_row = len(matrix) - 1
-    max_col = len(matrix[0]) - 1
+def fill_corners(mat, fill_value):
+    max_row = len(mat) - 1
+    max_col = len(mat[0]) - 1
 
     # flood-fills every corner
-    flood_fill(matrix, 0, 0, fill_value)  # top left
-    flood_fill(matrix, 0, max_col - 1, fill_value)  # top right
-    flood_fill(matrix, max_row - 1, 0, fill_value)  # bottom left
-    flood_fill(matrix, max_row - 1, max_col - 1, fill_value)  # bottom right
+    flood_fill(mat, 0, 0, fill_value)  # top left
+    flood_fill(mat, 0, max_col - 1, fill_value)  # top right
+    flood_fill(mat, max_row - 1, 0, fill_value)  # bottom left
+    flood_fill(mat, max_row - 1, max_col - 1, fill_value)  # bottom right
 
 
-def expand(matrix):
-    rows = len(matrix)
-    cols = len(matrix[0])
+def expand(mat: list[list[int]], ekstra: int):
+    global start
+    rows = len(mat)
+    cols = len(mat[0])
+    row, col = start
+    start = (row + ekstra, col + ekstra)
 
     # Create a new matrix with expanded dimensions
-    new_matrix = [[0] * (cols + 4) for _ in range(rows + 4)]
+    new_matrix = [[0] * (cols + 2 * ekstra) for _ in range(rows + 2 * ekstra)]
 
     # Copy values from the original matrix to the new matrix
     for i in range(rows):
         for j in range(cols):
-            new_matrix[i + 1][j + 1] = matrix[i][j]
+            new_matrix[i + ekstra][j + ekstra] = mat[i][j]
 
     return new_matrix
 
@@ -158,12 +166,9 @@ def expand(matrix):
 # start of task-processing
 # ---------------------------------------------------------------------------------------------------------------------
 
-# traversal start
-traverse_dfs(matrix, start, distances)
-
-# expands and fills distances
-distances = expand(distances)
-fill_corners(distances, "O")
+traverse_dfs(matrix, start, distances)  # traversal
+distances = expand(distances, 2)        # expands matrix
+fill_corners(distances, "O")            # flood-fills matrix
 
 # part 1  -  finds highest value in 2D array
 result = max(map(lambda row: max((value for value in row if isinstance(value, int)), default=0), distances))

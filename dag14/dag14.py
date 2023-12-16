@@ -1,7 +1,5 @@
 import time
-from itertools import cycle
 from tqdm import tqdm
-
 
 # parsing
 with open("input.txt", "r") as f:
@@ -19,7 +17,7 @@ def inside_bounds(row, col, max_rows, max_cols):
     return 0 <= row < max_rows and 0 <= col < max_cols
 
 
-# tilts the matrix to the north. O goes up, # blocks the way
+# tilts the matrix to specific direction
 def tilt(data, direction):
     max_rows = len(data)
     max_cols = len(data[0])
@@ -51,14 +49,29 @@ def tilt(data, direction):
     return data
 
 
+# IDE:
+# etter mange sykler vil det komme et mønster med de samme 4 tallene over og over igjen
+# fang disse og stop når mønstre gjentar seg
+
 # tilts in cycles (part 2)
 def tilt_cycle(data, cycles):
-    directions = cycle(["N", "W", "S", "E"])
+    directions = ["N", "W", "S", "E"]
+    end_direction = directions[(cycles - 1) % 4]
+
+    print("end up on:", end_direction)
 
     # for _ in range(cycles):
-    for _ in tqdm(range(cycles)):
-        direction = next(directions)
+    for _ in tqdm(range(cycles), desc="Tilting", unit="cycle", disable=True):
+        direction = directions[_ % 4]
+
         data = tilt(data, direction)
+        weights = sum([(row.count("O") * (len(row) - i)) for i, row in enumerate(data)])
+
+        if _ % 4 == 0: time.sleep(1)
+
+        print(f'{_ + 1}: {weights} {direction}')
+        if direction == "E": print()
+
 
     return data
 
