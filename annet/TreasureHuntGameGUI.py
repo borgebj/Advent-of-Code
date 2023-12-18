@@ -1,11 +1,11 @@
 import tkinter as tk
 from tkinter import messagebox
-from annet.algoritmer.matrix import matrix
+from annet.algoritmer.Matrix import Matrix
 
 class TreasureHuntGameGUI:
     def __init__(self, size):
         self.size = size
-        self.board = matrix(size)
+        self.board = Matrix(size)
         self.moves = 0
         self.directions = {"w": (-1, 0), "s": (1, 0), "a": (0, -1), "d": (0, 1), "e": None}
 
@@ -33,7 +33,7 @@ class TreasureHuntGameGUI:
 
     def reset_game(self):
         self.moves = 0
-        self.board = matrix(self.size)  # Create a new matrix object
+        self.board = Matrix(self.size)  # Create a new matrix object
         self.setup_game()
         self.draw_board()
 

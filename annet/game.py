@@ -1,11 +1,11 @@
 import random
 import time
 
-from annet.algoritmer.matrix import matrix
+from annet.algoritmer.Matrix import Matrix
 
 def main():
     size = int(input("Board size: "))
-    board = matrix(size)
+    board = Matrix(size)
     moves = 0
 
     board.place_start(size)  # places start in board

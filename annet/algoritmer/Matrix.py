@@ -1,7 +1,7 @@
 import random
 
 
-class matrix:
+class Matrix:
     def __init__(self, inp):
         self.board = []
         self.center = set()
@@ -17,7 +17,7 @@ class matrix:
         self.max_rows, self.max_cols = len(self.board), len(self.board[0])
 
     def initiate(self, inp):
-        self.board = [[x for x in line.strip()] for line in inp]
+        self.board = [line.split() for line in inp.split("\n")]
 
     def create_board(self, size):
         self.board = [["." for _ in range(size)] for _ in range(size)]
@@ -64,3 +64,9 @@ class matrix:
         a, b = first
         c, d = second
         self.board[a][b], self.board[c][d] = self.board[c][d], self.board[a][b]
+
+    def __str__(self):
+        return self.board
+
+    def __len__(self):
+        return len(self.board)
