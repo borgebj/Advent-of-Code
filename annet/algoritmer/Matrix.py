@@ -14,6 +14,10 @@ class Matrix:
         elif isinstance(inp, str):
             self.initiate(inp)
 
+        # array -> create from already existing
+        elif isinstance(inp, list):
+            self.board = inp
+
         self.max_rows, self.max_cols = len(self.board), len(self.board[0])
 
     def initiate(self, inp):
@@ -38,7 +42,9 @@ class Matrix:
 
         return adjacent
 
-    # for game
+
+
+    # ---------- [ for game ] ----------
     def place_treasure(self):
         srow, scol = self.center
         i, j = -1, -1
@@ -64,6 +70,26 @@ class Matrix:
         a, b = first
         c, d = second
         self.board[a][b], self.board[c][d] = self.board[c][d], self.board[a][b]
+    # ---------- [ for game ] ----------
+
+
+    # ---------- [ for printing ] ----------
+    def print_to_html(self, output_file):
+        with open(output_file, mode="w") as f:
+            f.write("<html><head><style>")
+            f.write(
+                "body { background-color: #1E1E1E; color: #FFFFFF; padding: 20px; margin: 0; font-family: monospace; }")
+            f.write("</style></head><body><pre>")
+
+            for row in self.board:
+                for i, x in enumerate(row):
+                    if i < len(row) - 1:
+                        f.write(f"{x} ")
+                    else:
+                        f.write(f"{x}<br>")
+            f.write("</pre></body></html>")
+    # ---------- [ for printing ] ----------
+
 
     def __str__(self):
         return self.board
