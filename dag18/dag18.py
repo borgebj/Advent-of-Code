@@ -3,9 +3,63 @@ import random
 
 from annet.algoritmer.Matrix import Matrix
 
+p1_dirs = {"U": (-1, 0), "D": (1, 0), "L": (0, -1), "R": (0, 1)}
+p2_dirs = {"0": p1_dirs["R"], "1": p1_dirs["D"], "2": p1_dirs["L"], "3": p1_dirs["U"]}
+
+
 # parsing
-with open("input", "r") as f:
-    instructions = [line.split() for line in f.readlines()]
+def parse():
+    with open("input", "r") as f:
+        return [line.split() for line in f.readlines()]
+
+
+# creates generator for part 1
+def part1():
+    for direction, steps, _ in parse():
+        yield p1_dirs[direction], int(steps)
+
+# creates generator for part 2
+def part2():
+    for _, _, hex in parse():
+        hex = hex[hex.find("(") + 1:hex.find(")")]
+        yield p2_dirs[hex[-1]], int(hex[1:-1], 16)
+
+
+# Uses shoelace algorithm for area of polgyons
+def shoelace(vertices):
+    total = 0
+    for i in range(len(vertices) - 1):
+        row, col = vertices[i][0], vertices[i][1]  # current row, col
+        nrow, ncol = vertices[i + 1][0], vertices[i + 1][1]  # next row, col
+        total += (row * ncol) - (col * nrow)  # difference of cross
+
+    return int(abs(total) * 0.5)
+
+
+# finds all vertices and calculates
+def calculate(generator):
+    vertices = [(0, 0)]
+    perimeter = 0
+
+    for (dx, dy), steps in generator:
+        row = vertices[-1][0] + dx * steps
+        col = vertices[-1][1] + dy * steps
+        vertices.append((row, col))
+        perimeter += steps
+
+    count = shoelace(vertices)
+    return count + perimeter // 2 + 1
+
+
+print(f'Part 1 area: {calculate(part1()):_}')
+print(f'Part 2 area: {calculate(part2()):_}')
+
+
+# ----------------------- [ OLD ] --------------------------------------
+# includes:
+# - ray-casting
+# - flood-fil
+# - matrix-creation
 
 
 # casts a ray from a random point to the edge to identify if point is inside or outside loop
@@ -45,7 +99,6 @@ def flood_fill(mat, i, j, fill):
 
 
 def create_matrix(instructions):
-    true_dir = {"0": "R", "1": "D", "2": "L", "3": "U"}
     edges = 0
 
     # base matrix and (x,y)
@@ -54,11 +107,6 @@ def create_matrix(instructions):
 
     for direction, steps, rgb in instructions:
         steps = int(steps)
-
-        # part 2: creates the true instructions
-        rgb = rgb[rgb.find("(")+1:rgb.find(")")]
-        direction = true_dir[rgb[-1]]
-        steps = int(rgb[1:-1], 16)
 
         # moves 'direction' in 'steps' steps
         for _ in range(steps):
@@ -98,17 +146,17 @@ def create_matrix(instructions):
             new_mat[row][col] = "#"
             mat = new_mat
 
+    print(*mat, sep="\n")
     return Matrix(mat)
 
-
-matrix = create_matrix(instructions)
-filled_matrix = ray_cast(matrix)
-
-border = sum([line.count("#") for line in matrix.board])
-fill = sum([line.count("#") for line in filled_matrix.board])
-
-print(f'Border count: {border}')
-print(f'Filled count: {fill}')
-
-matrix.print_to_html("border.html")
-filled_matrix.print_to_html("filled.html")
+# matrix = create_matrix(parse())
+# filled_matrix = ray_cast(matrix)
+#
+# border = sum([line.count("#") for line in matrix.board])
+# fill = sum([line.count("#") for line in filled_matrix.board])
+#
+# print(f'Border count: {border}')
+# print(f'Filled count: {fill}')
+#
+# matrix.print_to_html("border.html")
+# filled_matrix.print_to_html("filled.html")
