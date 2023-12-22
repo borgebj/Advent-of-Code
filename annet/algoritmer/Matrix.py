@@ -29,16 +29,18 @@ class Matrix:
     def inside_bounds(self, row: int, col: int):
         return 0 <= row < self.max_rows and 0 <= col < self.max_cols
 
-    def get_adjacent(self, row: int, col: int):
-        directions = [(-1, 0), (1, 0), (0, -1), (0, 1),
+    def get_adjacent(self, row: int, col: int, coords=None, exclude=None):
+        directions = [(-1, 0), (1, 0), (0, 1), (0, -1)
                       # (-1, -1), (-1, 1),(1, -1), (1, 1)
                       ]
-        # Nord - Sør - Vest - Øst - Nordvest - Nordøst - Sørvest - Sørøst
+        # Nord - Sør - Øst - Vest - Nordvest - Nordøst - Sørvest - Sørøst
         adjacent = []
 
         for dr, dc in directions:
             if self.inside_bounds(row + dr, col + dc):
-                adjacent.append(self.board[row + dr][col + dc])
+                if exclude is None or self.board[row+dr][col+dc] not in exclude:
+                    if coords: adjacent.append((row+dr, col+dc))
+                    else: adjacent.append(self.board[row + dr][col + dc])
 
         return adjacent
 
@@ -92,7 +94,7 @@ class Matrix:
 
 
     def __str__(self):
-        return self.board
+        return '\n'.join(map(str, self.board))
 
     def __len__(self):
         return len(self.board)
