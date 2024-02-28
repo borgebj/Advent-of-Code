@@ -19,18 +19,22 @@ from collections import deque
 
 
 def bfs(graph, start, steps):
-    visited = set([start])
     queue = deque([(start, 0)])  # Each element in the queue is now a tuple (coordinates, layer)
 
     while queue:
         (row, col), layer = queue.popleft()
 
+        print(f'Layer {layer}')
+
+        if layer == steps:
+            print(sum([line.count("o") for line in graph.board]))
+            break
+
         for nabo in graph.get_adjacent(row, col, coords=True, exclude=["#"]):
             nrow, ncol = nabo
-            if nabo not in visited:
-                graph.board[nrow][ncol] = "o"
-                visited.add(nabo)
-                queue.append((nabo, layer + 1))
+            graph.board[row][col] = "."
+            graph.board[nrow][ncol] = "o"
+            queue.append((nabo, layer + 1))
 
         graph.print_matrix()
 
